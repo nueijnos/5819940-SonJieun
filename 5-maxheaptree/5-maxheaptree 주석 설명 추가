@@ -1,0 +1,186 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <stdlib.h>
+#define MAX_SIZE 100
+
+//int key로 구성된 힙의 요소 구조체 정의
+typedef struct {
+    int key; 
+} element;
+
+//힙 트리 구조체 정의
+typedef struct TreeNode {
+    int heap_size;          
+    element heap[MAX_SIZE]; 
+} TreeNode;
+
+//힙 생성 함수(동적 메모리 할당 사용)
+TreeNode* create_heap() {
+    TreeNode* newNode = (TreeNode*)malloc(sizeof(TreeNode));
+    newNode->heap_size = 0; 
+    return newNode;
+}
+
+//힙 출력 함수
+void display_heap(TreeNode* h) {
+    for (int i = 1; i <= h->heap_size; i++) {
+        printf("%d ", h->heap[i].key); 
+    }
+    printf("\n");
+}
+
+//힙 메모리 해제 함수
+void free_heap(TreeNode* node) {
+    if (node == NULL) return;
+    free(node); //메모리 해제
+}
+
+//힙 삽입 함수
+void insertMaxHeapTree(TreeNode* h, element item) {
+    if (h->heap_size >= MAX_SIZE - 1) {
+        printf("힙이 가득 찼습니다!\n");
+        return; 
+    }
+
+    int i = ++h->heap_size; 
+    h->heap[i] = item;      
+    int count = 0;          
+
+    //힙에 새로운 노드가 들어왔을 때 새로운 노드를 힙에 마지막 노드에 이어서 삽입(upheap)
+    while ((i != 1) && (h->heap[i / 2].key < h->heap[i].key)) {
+        display_heap(h); 
+        element temp = h->heap[i / 2]; //부모와 자식을 교환
+        h->heap[i / 2] = h->heap[i];
+        h->heap[i] = temp;
+        i /= 2; //부모로 이동
+        count++; 
+    }
+
+    display_heap(h); 
+
+    if (count > 0) {
+        printf("노드가 이동된 횟수: %d\n", count); 
+    }
+}
+
+//힙 삭제 함수(루트 노드 삭제)
+element delete_heap(TreeNode* h) {
+    if (h->heap_size == 0) {
+        printf("힙이 비어 있습니다!\n");
+        return (element) { -1 }; 
+    }
+
+    element item = h->heap[1]; //삭제할 루트 노드
+    element temp = h->heap[h->heap_size--]; //마지막 노드를 루트에 이동시킴
+    int parent = 1;
+    int child = 2;
+    int count = 1; 
+
+    h->heap[parent] = temp; 
+    display_heap(h); 
+
+    //가장 큰 키값의 노드를 삭제하는 과정(downheap)
+    while (child <= h->heap_size) {
+        if (child < h->heap_size && h->heap[child].key < h->heap[child + 1].key) {
+            child++; 
+        }
+
+        if (temp.key >= h->heap[child].key) break; //부모가 자식보다 크면 
+
+        element prev = h->heap[parent]; // 부모와 자식 교환
+        h->heap[parent] = h->heap[child];
+        h->heap[child] = prev;
+
+        display_heap(h); 
+
+        parent = child; 
+        child *= 2;
+        count++; 
+    }
+
+    h->heap[parent] = temp; //최종 위치에 노드 배치
+    printf("노드가 이동된 횟수: %d\n", count);
+    return item;  
+}
+
+//힙의 레벨별 출력 함수
+void level_display(TreeNode* h) {
+    if (h->heap_size == 0) {
+        printf("힙이 비어 있습니다.\n");
+        return;
+    }
+
+    int level = 1;  //시작 레벨
+    int level_node_size = 1;  //레벨 노드 개수
+    int index = 1;  //힙 배열 인덱스
+
+    while (index <= h->heap_size) {
+        printf("[ %02d ] ", level);
+        for (int i = 0; i < level_node_size && index <= h->heap_size; i++) {
+            printf("%02d ", h->heap[index].key);  //해당 레벨의 노드 출력
+            index++;
+        }
+        printf("\n");
+        level++;
+        level_node_size *= 2; 
+    }
+}
+
+//힙 트리 생성 함수
+TreeNode* generateMaxHeapTree(int inputData[], int size) {
+    TreeNode* heap = create_heap();  
+    for (int i = 0; i < size; i++) {
+        insertMaxHeapTree(heap, (element){ inputData[i] }); 
+    }
+    return heap;
+}
+
+//사용자 인터페이스 함수
+void runUserInterface(TreeNode* root) {
+    char c = 0;
+    int num = 0;
+
+    for (;;) {  
+        printf("----------------------\n");
+        printf("| i  : 노드 추가     |\n");
+        printf("| d  : 노드 삭제     |\n");
+        printf("| p  : 레벨별 출력   |\n");
+        printf("| c  : 종료          |\n");
+        printf("----------------------\n");
+
+        printf("메뉴 입력: ");
+        scanf(" %c", &c);
+
+        switch (c) {
+        case 'i':
+            printf("추가할 값 입력: ");
+            scanf("%d", &num);
+            insertMaxHeapTree(root, (element){ num });  //노드 추가
+            break;
+        case 'd':
+            delete_heap(root);  //노드 삭제
+            break;
+        case 'p':
+            level_display(root);  //레벨별 출력
+            break;
+        case 'c':
+            free(root);  
+            exit(0);  //프로그램 종료
+            break;
+        default:
+            printf("잘못된 입력입니다!\n");
+        }
+    }
+}
+
+int main() {
+    int inputData[] = { 90, 89, 70, 36, 75, 63, 13, 21, 18, 5 };  
+    int size = sizeof(inputData) / sizeof(inputData[0]);  
+
+    TreeNode* root = generateMaxHeapTree(inputData, size);  
+    runUserInterface(root);  
+
+    free_heap(root);  
+
+    return 0;
+}
