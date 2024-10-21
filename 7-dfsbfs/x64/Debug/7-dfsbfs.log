@@ -1,0 +1,6 @@
+﻿  7-dfsbfs.c
+C:\Users\MS\OneDrive\Desktop\손지은\2학년\자료구조\second\실습quiz과제\7-dfsbfs\7-dfsbfs.c(226,6): warning C4273: 'free': dll 연결이 일치하지 않습니다.
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\ucrt\corecrt_malloc.h(89,14): message : 'free'의 이전 정의를 참조하십시오.
+C:\Users\MS\OneDrive\Desktop\손지은\2학년\자료구조\second\실습quiz과제\7-dfsbfs\7-dfsbfs.c(233,18): warning C4133: '함수': 'GraphNode *'과(와) 'GraphType *' 사이의 형식이 호환되지 않습니다.
+     C:\Users\MS\OneDrive\Desktop\손지은\2학년\자료구조\second\실습quiz과제\7-dfsbfs\x64\Debug\7-dfsbfs.lib 라이브러리 및 C:\Users\MS\OneDrive\Desktop\손지은\2학년\자료구조\second\실습quiz과제\7-dfsbfs\x64\Debug\7-dfsbfs.exp 개체를 생성하고 있습니다.
+  7-dfsbfs.vcxproj -> C:\Users\MS\OneDrive\Desktop\손지은\2학년\자료구조\second\실습quiz과제\7-dfsbfs\x64\Debug\7-dfsbfs.exe
