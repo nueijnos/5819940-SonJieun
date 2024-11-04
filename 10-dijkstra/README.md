@@ -1,2 +1,2 @@
-# Dijkstra (인접행렬) 
+# Dijkstra (인접행렬) {Result Image}
 ![](./dijkstra.PNG)
